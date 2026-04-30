@@ -19,7 +19,7 @@
     "typescript": "^5.5.4"
   },
   "engines": {
-    "node": ">=20.11.0"
+    "node": "20.x"
   },
   "packageManager": "npm@10.8.1"
 }
