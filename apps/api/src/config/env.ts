@@ -42,6 +42,8 @@ export const env = {
   nodeEnv: process.env.NODE_ENV ?? "development",
   port: readNumber("PORT", 10000),
   clientUrl: process.env.CLIENT_URL ?? "http://localhost:3000",
+  appTimezone: process.env.APP_TIMEZONE ?? "Asia/Kolkata",
+  defaultCurrency: process.env.DEFAULT_CURRENCY ?? "INR",
   mongoUri: readOptional("MONGODB_URI"),
   defaultUserId: readOptional("DEFAULT_USER_ID"),
   jwtSecret: readOptional("JWT_SECRET"),

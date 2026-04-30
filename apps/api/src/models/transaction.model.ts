@@ -10,7 +10,9 @@ export type TransactionDocument = {
   categoryName: string;
   paymentMode: string;
   bankCode?: string;
+  bankName?: string;
   transactionDate: Date;
+  postedDate?: Date;
   month: string;
   sources: Array<"manual" | "sms" | "notification" | "statement">;
   sourceRefs?: Array<Record<string, unknown>>;
@@ -37,7 +39,9 @@ const transactionSchema = new Schema<TransactionDocument>(
     categoryName: { type: String, required: true, default: "Uncategorized" },
     paymentMode: { type: String, required: true, default: "Unknown" },
     bankCode: { type: String, required: false },
+    bankName: { type: String, required: false },
     transactionDate: { type: Date, required: true },
+    postedDate: { type: Date, required: false },
     month: { type: String, required: true },
     sources: { type: [String], required: true, default: ["manual"] },
     sourceRefs: { type: [Schema.Types.Mixed], required: false },

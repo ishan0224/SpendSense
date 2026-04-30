@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   createTransactionSchema,
-  statementPreviewRequestSchema,
+  statementCommitRequestSchema,
   webhookIngestPayloadSchema
 } from "./index";
 
@@ -31,10 +31,11 @@ test("webhook schema rejects invalid datetime", () => {
   );
 });
 
-test("statement preview schema validates row list", () => {
-  const parsed = statementPreviewRequestSchema.parse({
+test("statement commit schema validates row list", () => {
+  const parsed = statementCommitRequestSchema.parse({
     fileName: "hdfc-apr.csv",
     fileType: "csv",
+    previewToken: "dummy-preview-token-dummy-preview-token",
     rows: [
       {
         rowNumber: 1,

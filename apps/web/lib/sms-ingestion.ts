@@ -11,6 +11,7 @@ import {
 import type { WebhookIngestPayload } from "@spendsense/shared";
 import { connectMongoForRouteHandler } from "./mongo";
 import {
+  WebBankMappingModel,
   WebCategoryRuleModel,
   WebIngestionLogModel,
   WebTransactionModel
@@ -34,6 +35,7 @@ type IngestionTransactionInput = {
   categoryName: string;
   paymentMode: string;
   bankCode: string;
+  bankName?: string;
   senderOriginal: string;
   senderNormalized: string;
   transactionDate: Date;
@@ -69,6 +71,7 @@ export type SmsIngestionPersistence = {
   findByCanonicalFingerprint(userId: string, canonicalFingerprint: string): Promise<{ id: string } | null>;
   getCategoryRules(userId: string): Promise<CategoryRule[]>;
   createTransaction(input: IngestionTransactionInput): Promise<{ id: string }>;
+  resolveBankName(userId: string, senderNormalized: string): Promise<string | undefined>;
   writeLog(input: IngestionLogInput): Promise<void>;
 };
 
@@ -212,6 +215,7 @@ export async function ingestSmsPayload({
   const rules = await persistence.getCategoryRules(userId);
   const categoryName = resolveCategory(parsed.merchantNormalized, rules);
   const transaction = await persistence.createTransaction({
+    bankName: await persistence.resolveBankName(userId, senderNormalized),
     userId,
     amountMinor: parsed.amountMinor,
     currency: defaultCurrency,
@@ -292,7 +296,7 @@ export function createMongoSmsIngestionPersistence(): SmsIngestionPersistence {
         categoryName: input.categoryName,
         paymentMode: input.paymentMode,
         bankCode: input.bankCode,
-        bankName: input.bankCode,
+        bankName: input.bankName,
         senderOriginal: input.senderOriginal,
         senderNormalized: input.senderNormalized,
         transactionDate: input.transactionDate,
@@ -313,6 +317,15 @@ export function createMongoSmsIngestionPersistence(): SmsIngestionPersistence {
         isIgnored: false
       });
       return { id: created._id.toString() };
+    },
+    async resolveBankName(userId, senderNormalized) {
+      await connectMongoForRouteHandler();
+      const mapping = await WebBankMappingModel.findOne({
+        userId: new mongoose.Types.ObjectId(userId),
+        senderCode: senderNormalized,
+        isActive: true
+      }).lean();
+      return mapping?.bankName;
     },
     async writeLog(input) {
       await connectMongoForRouteHandler();

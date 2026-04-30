@@ -35,6 +35,9 @@ function createMemoryPersistence(): SmsIngestionPersistence & {
       transactions.push(transaction);
       return { id: transaction.id };
     },
+    async resolveBankName() {
+      return undefined;
+    },
     async writeLog(input) {
       logs.push(input);
     }

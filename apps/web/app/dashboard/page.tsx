@@ -130,6 +130,18 @@ export default function DashboardPage() {
               value={month}
               onChange={(event) => setMonth(event.target.value)}
             />
+            <Link href="/import" className="rounded border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900">
+              Import Statement
+            </Link>
+            <Link href="/rules" className="rounded border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900">
+              Rules
+            </Link>
+            <Link href="/budgets" className="rounded border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900">
+              Budgets
+            </Link>
+            <Link href="/settings" className="rounded border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900">
+              Settings
+            </Link>
             <Link href="/transactions/new" className="rounded bg-slate-900 px-3 py-2 text-sm font-medium text-white">
               Add Transaction
             </Link>

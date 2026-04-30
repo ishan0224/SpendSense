@@ -45,6 +45,23 @@ type WebCategoryRuleDocument = {
   isActive: boolean;
 };
 
+type WebBankMappingDocument = {
+  userId: mongoose.Types.ObjectId;
+  senderCode: string;
+  bankName: string;
+  accountLabel?: string;
+  accountLast4?: string;
+  isActive: boolean;
+};
+
+type WebWebhookKeyDocument = {
+  userId: mongoose.Types.ObjectId;
+  name: string;
+  secretHash: string;
+  isActive: boolean;
+  lastUsedAt?: Date;
+};
+
 const transactionSchema = new Schema<WebTransactionDocument>(
   {
     userId: { type: Schema.Types.ObjectId, required: true },
@@ -107,6 +124,29 @@ const categoryRuleSchema = new Schema<WebCategoryRuleDocument>(
   { timestamps: true }
 );
 
+const bankMappingSchema = new Schema<WebBankMappingDocument>(
+  {
+    userId: { type: Schema.Types.ObjectId, required: true },
+    senderCode: { type: String, required: true, trim: true },
+    bankName: { type: String, required: true, trim: true },
+    accountLabel: { type: String, required: false, trim: true },
+    accountLast4: { type: String, required: false, trim: true },
+    isActive: { type: Boolean, required: true, default: true }
+  },
+  { timestamps: true }
+);
+
+const webhookKeySchema = new Schema<WebWebhookKeyDocument>(
+  {
+    userId: { type: Schema.Types.ObjectId, required: true },
+    name: { type: String, required: true, trim: true },
+    secretHash: { type: String, required: true },
+    isActive: { type: Boolean, required: true, default: true },
+    lastUsedAt: { type: Date, required: false }
+  },
+  { timestamps: true }
+);
+
 export const WebTransactionModel: mongoose.Model<WebTransactionDocument> =
   (mongoose.models.Transaction as mongoose.Model<WebTransactionDocument> | undefined) ??
   mongoose.model<WebTransactionDocument>("Transaction", transactionSchema);
@@ -118,3 +158,11 @@ export const WebIngestionLogModel: mongoose.Model<WebIngestionLogDocument> =
 export const WebCategoryRuleModel: mongoose.Model<WebCategoryRuleDocument> =
   (mongoose.models.CategoryRule as mongoose.Model<WebCategoryRuleDocument> | undefined) ??
   mongoose.model<WebCategoryRuleDocument>("CategoryRule", categoryRuleSchema);
+
+export const WebBankMappingModel: mongoose.Model<WebBankMappingDocument> =
+  (mongoose.models.BankMapping as mongoose.Model<WebBankMappingDocument> | undefined) ??
+  mongoose.model<WebBankMappingDocument>("BankMapping", bankMappingSchema);
+
+export const WebWebhookKeyModel: mongoose.Model<WebWebhookKeyDocument> =
+  (mongoose.models.WebhookKey as mongoose.Model<WebWebhookKeyDocument> | undefined) ??
+  mongoose.model<WebWebhookKeyDocument>("WebhookKey", webhookKeySchema);

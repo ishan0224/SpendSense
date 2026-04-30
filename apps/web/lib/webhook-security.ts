@@ -4,11 +4,7 @@ export function hashWebhookSecret(secret: string): string {
   return createHash("sha256").update(secret).digest("hex");
 }
 
-export function verifyWebhookSecret(secret: string | null, expectedHash: string | undefined): boolean {
-  if (!secret || !expectedHash) {
-    return false;
-  }
-
+function compareHash(secret: string, expectedHash: string): boolean {
   const actualHash = hashWebhookSecret(secret);
   const actual = Buffer.from(actualHash, "hex");
   const expected = Buffer.from(expectedHash, "hex");
@@ -18,4 +14,18 @@ export function verifyWebhookSecret(secret: string | null, expectedHash: string 
   }
 
   return timingSafeEqual(actual, expected);
+}
+
+export function verifyWebhookSecret(secret: string | null, expectedHash: string | undefined): boolean {
+  if (!secret || !expectedHash) {
+    return false;
+  }
+  return compareHash(secret, expectedHash);
+}
+
+export function verifyWebhookSecretAgainstHashes(secret: string | null, hashes: string[]): boolean {
+  if (!secret || hashes.length === 0) {
+    return false;
+  }
+  return hashes.some((hash) => compareHash(secret, hash));
 }

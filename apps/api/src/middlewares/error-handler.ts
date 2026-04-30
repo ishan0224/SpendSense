@@ -1,4 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
+import { MulterError } from "multer";
 import { ZodError } from "zod";
 import { isHttpError } from "../utils/http-error";
 
@@ -34,6 +35,19 @@ export function errorHandler(
         code: error.code,
         message: error.message,
         details: error.details
+      }
+    });
+    return;
+  }
+
+  if (error instanceof MulterError) {
+    const isSizeLimit = error.code === "LIMIT_FILE_SIZE";
+    res.status(isSizeLimit ? 413 : 400).json({
+      error: {
+        code: isSizeLimit ? "STATEMENT_FILE_TOO_LARGE" : "MULTIPART_ERROR",
+        message: isSizeLimit
+          ? "Statement file exceeds 5MB limit"
+          : "Unable to process multipart upload"
       }
     });
     return;

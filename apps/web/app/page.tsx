@@ -11,6 +11,31 @@ export default function HomePage() {
             Go to Dashboard
           </a>
         </div>
+        <div className="mt-2">
+          <a className="text-sm font-medium text-slate-900 underline" href="/import">
+            Import Statement
+          </a>
+        </div>
+        <div className="mt-2">
+          <a className="text-sm font-medium text-slate-900 underline" href="/rules">
+            Manage Rules
+          </a>
+        </div>
+        <div className="mt-2">
+          <a className="text-sm font-medium text-slate-900 underline" href="/budgets">
+            Manage Budgets
+          </a>
+        </div>
+        <div className="mt-2">
+          <a className="text-sm font-medium text-slate-900 underline" href="/logs">
+            View Logs
+          </a>
+        </div>
+        <div className="mt-2">
+          <a className="text-sm font-medium text-slate-900 underline" href="/settings">
+            Settings
+          </a>
+        </div>
       </div>
     </main>
   );
