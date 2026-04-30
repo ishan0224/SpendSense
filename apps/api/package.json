@@ -13,6 +13,7 @@
     "db:sync-indexes": "node --import tsx src/scripts/sync-indexes.ts"
   },
   "dependencies": {
+    "@spendsense/parser": "0.1.0",
     "@spendsense/shared": "0.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
