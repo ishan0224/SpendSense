@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "test": "node --import tsx --test lib/sms-ingestion.test.ts"
+    "test": "node --import tsx --test lib/sms-ingestion.test.ts lib/api-client.test.ts"
   },
   "dependencies": {
     "@spendsense/parser": "0.1.0",

@@ -53,7 +53,8 @@ export async function POST(request: Request) {
     const responseStatus = result.status === "created" ? 201 : 200;
     return NextResponse.json(result, { status: responseStatus });
   } catch (error) {
-    console.error(error);
+    const errorName = error instanceof Error ? error.name : "UnknownError";
+    console.error(`[webhook_ingest_failed] ${errorName}`);
     return NextResponse.json(
       { status: "failed", reason: "invalid_or_failed_payload" },
       { status: 400 }
